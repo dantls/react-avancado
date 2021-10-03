@@ -22,3 +22,6 @@ export const Content = styled.div`
   align-items: center;
   margin-bottom: 1rem;
 `;
+export const Info = styled.div`
+  height: 2rem;
+`;

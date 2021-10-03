@@ -3,17 +3,22 @@ import { useState } from 'react';
 import { Light } from '../Light';
 import {
   Container,
-  Content
+  Content,
+  Info
 } from './styles';
 
 export function Spotlight(){
 
-  const [active, setActive] = useState('')
+  const [active, setActive] = useState<'stop'| 'wait'| 'go'>()
 
-  const TypeVariations = {
-    stop: "Cuidado! Espere o sinal abrir",
-    wait: "Atenção! Está preste a ficar vermelho",
-    go: "Pode passar"
+  function getMessage(type: 'stop'| 'wait'| 'go'){
+    const TypeVariations = {
+      stop: "Cuidado! Espere o sinal abrir",
+      wait: "Atenção! Está preste a ficar vermelho",
+      go: "Pode passar"
+    }
+
+    return TypeVariations[type] 
   }
 
   return (
@@ -23,32 +28,24 @@ export function Spotlight(){
         <Light 
           model="stop"
           onClick={() => setActive('stop')}
+          isActive={active === 'stop'}
         />
        
         <Light 
           model="wait"
           onClick={() => setActive('wait')}
+          isActive={active === 'wait'}
         />
 
         <Light 
           model="go"
           onClick={() => setActive('go')}
-        />
-       
-        
+          isActive={active === 'go'}
+        /> 
       </Content>
-      {
-        (active === '') && <p>Clique e escolha</p>
-      }
-      {
-        (active === 'stop') && <p>{TypeVariations['stop']}</p>
-      }
-      {
-        (active === 'wait') && <p>{TypeVariations['wait']}</p>
-      }
-      {
-        (active === 'go') && <p>{TypeVariations['go']}</p>
-      }
+      <Info>
+        {!!active && getMessage(active)}
+      </Info>
     </Container>
   )
 }

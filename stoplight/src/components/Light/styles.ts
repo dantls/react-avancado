@@ -2,6 +2,7 @@ import styled, {css} from 'styled-components';
 
 type TypeProps = {
   model: 'stop'| 'wait'|'go';
+  isActive: boolean;
 }
 
 const TypeVariations = {
@@ -17,15 +18,10 @@ const TypeVariations = {
 };
 
 export const Container = styled.button<TypeProps>`
-  width: 5rem;
-  height: 5rem;
+  width: ${({isActive}) => isActive ? '5.2rem' : '5rem'};
+  height: ${({isActive}) => isActive ? '5.2rem' : '5rem'};
   border-radius: 50%;
   margin: 0.2rem;
   ${({model}) => TypeVariations[model]}
   border: none;
-
-  &:hover{
-    width: 5.2rem;
-    height: 5.2rem;
-  }
 `;
