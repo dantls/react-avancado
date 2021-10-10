@@ -3,22 +3,22 @@
     {
       "id": 1,
       "name": "Gasolina Comum",
-      "price": 9.44
+      "price": 6.55
     },
     {
       "id": 2,
       "name": "Etanol",
-      "price": 6.42
+      "price": 8.42
     },
     {
       "id": 3,
       "name": "Diesel",
-      "price": 4.19
+      "price": 3.19
     },
     {
       "id": 4,
       "name": "Gasolina Aditivada",
-      "price": 4.19
+      "price": 5.19
     }
   ]
 }

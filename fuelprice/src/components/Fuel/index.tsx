@@ -1,4 +1,4 @@
-import { getFuel } from "./services";
+import { getFuel, updatedFuel } from "./services";
 import { useState, useEffect } from "react";
 import {
   Container,
@@ -16,38 +16,75 @@ import {
   FuelInput,
 } from "./styles";
 
-import { FuelComponentProps, IFuel } from "./types";
-import { api } from "../../services/api";
+import { FuelComponentProps, IFuelState } from "./types";
+
+const TIME_TO_INTERVAL_MS = 1000;
 
 export function FuelComponent({
   editMode,
   toggleEditMode,
 }: FuelComponentProps) {
-  const [fuels, setFuels] = useState<IFuel[]>([]);
+  const [fuels, setFuels] = useState<IFuelState[]>([]);
 
   async function fetchAndUpdateData() {
     const data = await getFuel();
 
     setFuels(data);
   }
-  async function onUpdatePrice(fuelId: number, price: string) {
-    const updatedFuels = fuels.map((fuel) => {
-      if (fuel.id === fuelId) {
+  
+  function onUpdatePrice(fuelId:number, price:string){
+
+    const updatedFuels = fuels.map(fuel => {
+      if (fuel.id === fuelId){
         fuel.price = Number(price);
+        fuel.updated = true;
       }
-      return fuel;
-    });
+      return fuel
+    })
 
     setFuels(updatedFuels);
   }
 
-  async function handleSave(){
-    await api.post('fuel', fuels);
+  async function onSave(){
+
+    const updatedFuels = fuels.filter(fuel => fuel.updated)
+
+    if(!updatedFuels.length){
+      toggleEditMode();
+      return;
+    } 
+
+    for (const changedFuel of updatedFuels) {
+
+      const {updated, ...rest} = changedFuel;
+
+      await updatedFuel(rest)
+
+    }
+
+    fetchAndUpdateData();
     toggleEditMode();
   }
 
   useEffect(() => {
     fetchAndUpdateData();
+  }, []);
+
+
+  useEffect(() => {
+
+    const intervalId = setInterval(() => {
+
+      if(editMode) return;
+
+      fetchAndUpdateData();
+
+    },TIME_TO_INTERVAL_MS)  
+
+    return () => {
+      clearInterval(intervalId)
+    }
+
   }, []);
 
   return (
@@ -79,7 +116,7 @@ export function FuelComponent({
                     value={fuel.price}
                     type="number"
                     onChange={(event) => {
-                      onUpdatePrice(fuel.id , event.target.value);
+                      onUpdatePrice(fuel.id, event.target.value) 
                     }}
                   />
                 ) : (
@@ -93,7 +130,7 @@ export function FuelComponent({
         {editMode && (
           <Row>
             <SaveButton
-              onClick={() => handleSave()}
+              onClick={() => onSave()}
             >
               <SaveIcon />
               Salvar
@@ -104,3 +141,5 @@ export function FuelComponent({
     </Container>
   );
 }
+
+  
