@@ -8,11 +8,13 @@
     "backend:serve": "json-server --watch ./server/db.json --port 3333"
   },
   "dependencies": {
+    "axios": "^0.22.0",
+    "json-server": "^0.16.3",
     "react": "^17.0.0",
     "react-dom": "^17.0.0",
     "react-icons": "^4.3.1",
-    "styled-components": "^5.3.1",
-    "json-server": "^0.16.3"
+    "react-transition-group": "1.x",
+    "styled-components": "^5.3.1"
   },
   "devDependencies": {
     "@types/react": "^17.0.0",
